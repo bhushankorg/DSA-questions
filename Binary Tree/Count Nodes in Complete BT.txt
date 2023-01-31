@@ -1,0 +1,27 @@
+class Solution {
+public:
+    //calculate left boundary height
+    int leftHeight(TreeNode* root){
+        if(root == NULL) return 0;
+
+        return 1 + leftHeight(root->left);
+    }
+    //calculate right boundary height
+    int rightHeight(TreeNode* root){
+        if(root == NULL) return 0;
+
+        return 1 + rightHeight(root->right);
+    }
+    int countNodes(TreeNode* root) {
+        if(root == NULL) return 0;
+
+        int LH = leftHeight(root->left);
+        int RH = rightHeight(root->right);
+
+        //if it is perfect binary tree return no of nodes using formula 
+        if(LH == RH) return pow(2, LH + 1) - 1;
+
+        return 1 + countNodes(root->left) + 
+                    countNodes(root->right);
+    }
+};

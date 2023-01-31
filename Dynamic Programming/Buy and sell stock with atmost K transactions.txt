@@ -1,0 +1,28 @@
+//we have to buy or sell the stock using atmost k transactions.
+//we use backtracking recursive approach to buy or not buy stock on that day
+if we have to buy a stock o that day then we have 2 choices to buy on that day or to go for next day.
+Similarly, if we have to sell a stock o that day then we have 2 choices to sell on that day or to go for next day.
+//when we buy and sell the stock 1 trans is complete.
+//To keep track of buy and sell we can use technique od transNo which have values from (0 - 2*k) for each operation.
+//if this no is even means we have to buy now else we have to sell .
+
+int buySell(int curr, int transNo, int k, vector<int>& prices, vector<vector<int>>&dp) {
+	int n = prices.size();
+	if (curr == n || transNo == 2 * k) return 0; // base case since 1 transaction equals 2 operations (buy, sell)
+
+	if (dp[curr][transNo] != -1) return dp[curr][transNo]; // memorization
+
+	if (transNo % 2 == 0) {
+		return dp[curr][transNo] = max(-prices[curr] + buySell(curr + 1, transNo + 1, k, prices, dp), 0 + buySell(curr + 1, transNo, k, prices, dp));
+	} //we will find maximized profit by considering two choices
+
+	return dp[curr][transNo] = max(prices[curr] + buySell(curr + 1, transNo + 1, k, prices, dp), 0 + buySell(curr + 1, transNo, k, prices, dp));
+}
+
+int maxProfit(int k, vector<int>& prices) {
+	int n = prices.size();
+	vector<vector<int>>dp(n, vector<int>(2 * k, -1)); //dp vector
+
+	return buySell(0, 0, k, prices, dp);
+}
+Do upvote if it helps

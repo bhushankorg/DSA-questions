@@ -1,0 +1,42 @@
+//https://leetcode.com/problems/balanced-binary-tree/
+//Check if tree is balanced or not
+
+//TC - O(N*N)    
+ 
+    int findHeight(TreeNode* root){         //Normal function to give height of binary tree
+        if(root == NULL) return 0;
+
+        int left = findHeight(root->left);
+        int right = findHeight(root->right);
+
+        return 1 + max(left, right);
+    }
+    bool isBalanced(TreeNode* root) {
+        if(root == NULL) return true;
+        
+        //find left height and right height
+        int left = findHeight(root->left);
+        int right = findHeight(root->right);
+        //if height diff is greater than 1 return false
+        //check for subtrees
+        int diff = abs(left - right);       
+        
+        return  (diff <= 1 && isBalanced(root->left) && isBalanced(root->right));
+    }
+
+//TC - O(N)    
+    int height(TreeNode* root){
+        if(!root) return 0;
+
+        int lh = height(root->left);
+        int rh = height(root->right);
+	
+	//This line changes height function to balanced height
+        if(lh == -1 || rh == -1 || abs(lh - rh) > 1) return -1;
+
+        return 1 + max(lh, rh);		//modified height function
+    }
+    bool isBalanced(TreeNode* root) {
+        if(!root) return true;
+        return height(root) != -1;
+    }

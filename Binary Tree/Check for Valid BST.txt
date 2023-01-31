@@ -1,0 +1,21 @@
+class Solution {
+public:
+    bool checkBST(TreeNode* root, long long min, long long max){
+        if(root == NULL) return true;
+        
+	//if value doen't fit in given range return false
+	long long val = root->val;	
+        if(val < min || val > max) return false;
+        
+	//resize the range as we traverse
+        bool left = checkBST(root->left, min, (long long)(val - 1));
+        bool right = checkBST(root->right, (long)(val + 1), max);
+
+        return left and right;
+    }
+    bool isValidBST(TreeNode* root) {
+        if(!root) return true;
+    
+        return checkBST(root, LONG_MIN, LONG_MAX);
+    }
+};

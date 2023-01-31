@@ -1,0 +1,52 @@
+//https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/
+//Find nodes at kth distance
+
+     
+     unordered_map<TreeNode*, TreeNode*> createParent(TreeNode* root){	//create parent pointer
+        unordered_map<TreeNode*, TreeNode*> parent;
+           
+        queue<TreeNode*> q;
+        parent[root] = NULL;
+        q.push(root);
+
+        while(!q.empty()){
+            TreeNode* node = q.front();
+            q.pop();
+
+            if(node->left) {
+                parent[node->left] = node;
+                q.push(node->left);
+            }
+            if(node->right) {
+                parent[node->right] = node;
+                q.push(node->right);
+            }
+        }
+
+        return parent;
+    }
+    void dfs(TreeNode* root, int k, vector<int> &res, unordered_map<TreeNode*, bool> &vis, 
+                 unordered_map<TreeNode*, TreeNode*> parent){
+        if(root == NULL || vis[root] || k < 0) return;
+        if(k == 0) {
+            res.push_back(root->val);
+            return;
+        }
+
+        vis[root] = true;
+        dfs(root->left, k - 1, res, vis, parent);
+        dfs(root->right, k - 1, res, vis, parent);
+        dfs(parent[root], k - 1, res, vis, parent);
+        vis[root] = false;
+    }
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        vector<int> res;
+        if(root == NULL) return res;
+
+        unordered_map<TreeNode*, TreeNode*> parent = createParent(root);	//parent pointer
+
+        unordered_map<TreeNode*, bool> vis;
+        dfs(target, k, res, vis, parent);	//make a DFS/BFS to find elements at kth Distance
+
+        return res;
+    }

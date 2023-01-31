@@ -1,0 +1,21 @@
+//https://leetcode.com/problems/house-robber/submissions/
+//Dp solution with simple memorization TC O(N) SC O(N+N)  
+class Solution {
+public:
+    int maxMoney(int curr, vector<int>& nums, vector<int>& dp){
+        int n = nums.size();
+	    if(curr >= n) return 0;
+        
+        if(dp[curr] != -1) return dp[curr];
+	
+	    int left = nums[curr] + maxMoney(curr+2, nums, dp);
+        int right = 0 + maxMoney(curr+1, nums, dp);
+        
+        return dp[curr] = max(left, right);
+    }
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        vector<int>dp(n, -1);
+        return maxMoney(0, nums, dp);
+    }
+};

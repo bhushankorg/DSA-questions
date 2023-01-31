@@ -1,0 +1,52 @@
+//Vertical Order Traversal of a Binary Tree (HARD)
+//https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/
+
+
+    int minX, maxX, maxY;
+    //function fills value using level order traversals 
+    map<pair<int, int>, multiset<int>> levelOrder(TreeNode* root) {
+	
+	queue<pair<TreeNode*, int>> q;
+	q.push({root, 0});
+	int y = 0;
+	
+	while (!q.empty()) {
+		int size = q.size();
+		while(size--){
+			TreeNode* curr = q.front().first;
+			int x = q.front().second;
+			q.pop();
+			
+			minX = min(x, minX);
+			maxX = max(x, maxX);
+			
+			mp[{x, y}].insert(curr->val);
+			
+			if(curr->left) q.push({curr->left, x - 1});
+			if(curr->right) q.push({curr->right, x + 1});
+		}
+		maxY = max(maxY, y);
+		y++;
+	}
+
+	return mp;
+}
+vector<vector<int>> verticalTraversal(TreeNode* root) {
+	vector<vector<int>> res;
+	if (!root) return res;
+	
+	minX = 1e9, maxX = -1e9, maxY = -1e9;
+    //This function fills all values to the respective co-ordinates
+	map<pair<int, int>, multiset<int>> mp = levelOrder(root);
+
+    //traverse map using min and max X value
+	for (int j = minX; j <= maxX; j++) {
+		vector<int>level;
+		for(int i = 0; i <= maxY; i++){
+			for(int num : mp[{j, i}]) level.push_back(num);
+		}
+		res.push_back(level);
+	}
+
+	return res;
+}

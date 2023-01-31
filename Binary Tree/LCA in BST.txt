@@ -1,0 +1,18 @@
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root) return NULL;
+        
+        int min = p->val, max = q->val;
+        if(min > max) swap(min, max);
+
+        //We only have to find first element which is min >= element <= max 
+        while(root){
+            if(root->val >= min && root->val <= max) return root;
+            else if(root->val > max) root = root->left;
+            else root = root->right;
+        }
+
+        return NULL;
+    }
+};

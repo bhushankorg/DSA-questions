@@ -1,0 +1,15 @@
+//DP with 2 pointers most optimal TC O(N) SC O(1) 
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int prev = nums[0], prev2 = 0, curr = 0;
+
+        for (int i = 1; i < nums.size(); i++)	{
+            int left = nums[i] + prev2;
+            prev2 = prev;
+            prev = max(left, prev);
+        }
+        
+        return prev;
+    }
+};

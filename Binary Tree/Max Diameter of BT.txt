@@ -1,0 +1,24 @@
+//Maximum Diameter of Binary Tree
+//https://leetcode.com/problems/diameter-of-binary-tree/
+
+    int diameter;   //global variable
+    int maxHeight(TreeNode* root){
+        if(root == NULL) return 0;
+
+        //calculate left and right height
+        int left = maxHeight(root->left);
+        int right = maxHeight(root->right);
+
+        //update max diameter
+        diameter = max(diameter, left + right);
+
+        //return height
+        return 1 + max(left, right);
+    }
+    int diameterOfBinaryTree(TreeNode* root) {
+        if(root == NULL) return 0;        
+
+        maxHeight(root);
+
+        return diameter;
+    }

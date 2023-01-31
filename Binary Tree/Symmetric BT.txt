@@ -1,0 +1,15 @@
+//Check if Binary Tree is Symmetric   
+    bool checkSymmetry(TreeNode* leftRoot, TreeNode* rightRoot){
+        if(!leftRoot && !rightRoot) return true;
+        if(!leftRoot || !rightRoot) return false;
+
+        if(leftRoot->val != rightRoot->val) return false;
+
+        //check left's left with right's right
+        //check left's right with right's left
+        return checkSymmetry(leftRoot->left, rightRoot->right) && 
+            checkSymmetry(leftRoot->right, rightRoot->left);
+    }
+    bool isSymmetric(TreeNode* root) {
+        return checkSymmetry(root->left, root->right);
+    }

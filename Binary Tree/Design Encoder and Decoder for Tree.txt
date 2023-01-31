@@ -1,0 +1,78 @@
+//297. Serialize and Deserialize Binary Tree
+//https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+
+class Codec {
+public:
+    // Encodes a tree to a single string.
+    //for seriarialization we use level order traversal
+    //we will store NULL nodes as N
+    string serialize(TreeNode* root) {
+        string data = "";
+        if(root == NULL) return data;
+
+        queue<TreeNode*>q;
+        q.push(root);
+
+        while(!q.empty()){
+            TreeNode* node = q.front();
+            q.pop();
+
+            if(node == NULL) {
+                data +=  (" N");
+                continue;
+            }
+            data += (" " + to_string(node->val));
+
+            q.push(node->left);
+            q.push(node->right);
+        }
+
+        return data.substr(1);
+    }
+
+    //Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if(data == "") return NULL;
+
+        //create numbers array from given string
+        //for null nodes we store -10001
+        vector<int> levelOrder;
+        string tmp = "";
+        for(int i = 0; i < data.length(); i++){
+            if(data[i] == ' ') {
+                int value = (tmp == "N") ? -10001 : stoi(tmp);
+                levelOrder.push_back(value);    
+                tmp = "";
+            }
+            else tmp += data[i];
+        }
+        int value = (tmp == "N") ? -10001 : stoi(tmp);
+        levelOrder.push_back(value);
+
+        int n = levelOrder.size();
+        TreeNode* root = new TreeNode(levelOrder[0]);
+        queue<TreeNode*> q;
+        q.push(root);
+
+        //traverse numbers array by height
+        for(int i = 1; i < log2(n); i++){
+            int start = pow(2, i) - 1;
+            //attach left and right to nodes in queue while pushing same in queue
+            for(int j = start; j < start + pow(2, i) && j < n; j+=2){
+                TreeNode* node = q.front();
+                q.pop();
+
+                TreeNode* left = (levelOrder[j] == -10001)? NULL : new TreeNode(levelOrder[j]);
+                TreeNode* right = (levelOrder[j + 1] == -10001)? NULL : new TreeNode(levelOrder[j + 1]);
+
+                if(left != NULL) q.push(left);
+                if(right != NULL) q.push(right);
+                
+                node->left = left;
+                node->right = right;
+            }
+        }
+
+        return root;
+    }
+};

@@ -1,0 +1,29 @@
+//105. Construct Binary Tree from Preorder and Inorder Traversal
+//https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
+
+class Solution {
+public:
+    int findInd(int start, int end, int key, vector<int> arr){
+        for(int i = start; i <= end; i++) if(arr[i] == key) return i;
+        return -1;
+    }
+    int ind;
+    TreeNode* fillNodes(int i, int j, vector<int>& preorder, vector<int>& inorder){
+        if(i > j) return NULL;
+
+        int key = preorder[ind];
+        ind++;
+        int keyInd = findInd(i, j, key, inorder);
+
+        TreeNode* root = new TreeNode(key);
+
+        root->left = fillNodes(i, keyInd - 1, preorder, inorder);
+        root->right = fillNodes(keyInd + 1, j, preorder, inorder);
+
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        ind = 0;
+        return fillNodes(0, inorder.size() - 1, preorder, inorder);
+    }
+};

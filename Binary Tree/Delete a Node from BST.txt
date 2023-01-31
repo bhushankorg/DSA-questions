@@ -1,0 +1,51 @@
+class Solution {
+public:   
+	//This function gives Xtream right child of any subtree 
+    TreeNode* findXtreamRight(TreeNode* root){
+        while(root->right) root = root->right;
+
+        return root;
+    }
+    TreeNode* attachNode(TreeNode* node){
+    	//deleteNode doesn't have left subtree
+    	if(node->left == NULL) return node->right;
+    	
+    	//deleteNode doesn't have right subtree
+    	if(node->right == NULL) return node->left;
+    	
+    	//connect node's left rightest of left subtree
+    	TreeNode* leftRightest = findXtreamRight(node->left);    	
+    	leftRightest->right = node->right;
+    	
+    	return node->left;
+    }
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if(!root) return NULL;
+
+        //first edge case -> if root is deleteNode
+        if(root->val == key) return attachNode(root);
+        
+        //search Node
+        TreeNode* curr = root;
+        while(curr){
+        	if(curr->val > key){
+        		//node is found then make the connection
+        		if(curr->left != NULL && curr->left->val == key){
+        			curr->left = attachNode(curr->left);
+        			break;
+        		}
+        		curr = curr->left;
+        	}
+        	else{
+        		//node is found then make the connection
+        		if(curr->right != NULL && curr->right->val == key){
+        			curr->right = attachNode(curr->right);
+        			break;
+        		}
+        		curr = curr->right;
+        	}
+        }
+
+        return root;
+    }
+};

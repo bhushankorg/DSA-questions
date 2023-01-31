@@ -1,0 +1,31 @@
+https://practice.geeksforgeeks.org/problems/m-coloring-problem-1587115620/1	
+
+bool isValid(int currNode, int colour, vector<int>&colourArr, bool graph[101][101]){
+	for (int i = 0; i < 101; i++)	{
+		if(currNode != i && graph[i][currNode] && colourArr[i] == colour){
+			return false;
+			}
+		}
+	return true;
+}
+
+bool backTracker(bool graph[101][101], int m, int n, int currNode, vector<int>&clr){
+	if(currNode == n) return true;
+		
+	for (int i = 1; i <= m; i++)	{
+		if(isValid(currNode, i, clr, graph)){
+			clr[currNode] = i;
+			if(backTracker(graph,m,n,currNode+1,clr)){
+				return true;
+			}
+			clr[currNode] = 0;
+		}
+	}
+	return false;
+}
+bool graphColoring(bool graph[101][101], int m, int n) {
+        // your code here
+        vector<int>colours(n,0);
+	
+    return backTracker(graph,m,n,0,colours);
+}

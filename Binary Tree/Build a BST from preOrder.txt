@@ -1,0 +1,54 @@
+//Rusty Code but Works
+class Solution {
+public:
+    int ind;
+    bool isInRange(int key, int min, int max){
+        return (key >= min && key <= max);
+    }
+    TreeNode* buildTree(int min, int max, vector<int>& preorder){
+        if(ind == preorder.size()) return NULL;         //array is vested here
+
+         int value = preorder[ind];
+
+        if(!isInRange(value, min, max)) return NULL;    //value doesn't fit in range ie belongs to far right
+        ind++;
+
+        TreeNode* root = new TreeNode(value);
+        if(ind == preorder.size()) return root;         //array vested after last value
+    
+        int curr = preorder[ind];
+        //Check if new value belongs to left, right or diff subtree
+        if(isInRange(curr, min, value - 1)){
+            root->left = buildTree(min, value - 1, preorder);
+            root->right = buildTree(value + 1, max, preorder);
+        }
+        else if(isInRange(curr, value + 1, max)){
+            root->right = buildTree(value + 1, max, preorder);
+        }
+
+        return root;
+    }
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        ind = 0;
+        return buildTree(INT_MIN, INT_MAX, preorder);
+    }
+};
+
+//Clean Striver code
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, int &ind, int bound){
+        if(ind == preorder.size() || preorder[ind] > bound) return NULL;
+
+        TreeNode* node = new TreeNode(preorder[ind++]);
+
+        node->left = buildTree(preorder, ind, node->val);
+        node->right = buildTree(preorder, ind, bound);
+
+        return node;
+    }
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int ind = 0;
+        return buildTree(preorder, ind, INT_MAX);
+    }
+};

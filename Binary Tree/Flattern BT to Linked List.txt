@@ -1,0 +1,38 @@
+//Recursive approach
+TreeNode* prev = NULL;
+void flattern(TreeNode* node){
+	if(node == NULL) return;
+	
+	flattern(node->right);
+	flattern(node->left);
+	
+	node->right = prev;
+	node->left = NULL;
+
+	prev = node;
+}
+
+//Iterative Approach
+class Solution {
+public:
+    //Since we flattern BT in preorder fashion
+    //we go to left subtree connect its rightest with right of root
+    //make left subtree as right subtree
+    //recurse to new right subtree
+
+    void flatten(TreeNode* root) {
+        TreeNode* curr = root;
+
+        while(curr != NULL){
+            if(curr->left){
+                TreeNode* prev = curr->left;
+                while(prev->right) prev = prev->right;
+                prev->right = curr->right;
+
+                curr->right = curr->left;
+                curr->left = NULL;
+            }
+            curr = curr->right;
+        }
+    }
+};

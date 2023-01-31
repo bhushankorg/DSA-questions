@@ -1,0 +1,34 @@
+//https://practice.geeksforgeeks.org/problems/tower-of-hanoi-1587115621/1
+//Pure recursively, for placing source ------> dest
+//source --------> helper
+//helper --------> dest
+
+#include <bits/stdc++.h>
+using namespace std;
+#define INT_MIN_VALUE -2147483648
+#define INT_MAX_VALUE 2147483647
+
+void placeDisk(int N, int source, int dest, int helper, long long &count) {
+	if (N == 0) return;
+
+	count++;
+	placeDisk(N - 1, source, helper, dest, count);
+	cout << "Moving disk " << N << " from rod " << source << " to rod " << dest << endl;
+	placeDisk(N - 1, helper, dest, source, count);
+}
+
+long long toh(int N, int from, int to, int aux) {
+	long long count = 0;
+	placeDisk(N, from, to, aux, count);
+
+	return count;
+}
+
+int main() {
+	int n;
+	cin >> n;
+
+	cout << toh(n, 0, 2, 1);
+
+	return 0;
+}

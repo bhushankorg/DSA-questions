@@ -1,0 +1,30 @@
+//https://practice.geeksforgeeks.org/problems/count-palindromic-subsequences/1
+//dp, recursion, palindrome
+//if(str[i] == str[j]) send pudhcha and padhcha part in recursion +1
+//else end pudhcha and padhcha part in recursion minus madhla part of string
+//base case i cross j return 0 && i == j return 1 karan each character is always palindrome
+//use memorization for overlapping i, j
+
+    long long MOD = 1e9 + 7;
+    long long int dp[1001][1001];
+    long long int findPalind(string &str, int i, int j){
+        if (i > j || j < 0) return 0;
+	
+    	if (dp[i][j] != -1) return dp[i][j];
+    	
+    	if (i == j) return dp[i][j] = 1;	
+    
+    	if (str[i] == str[j]) 
+    		return dp[i][j] = (findPalind(str, i + 1, j)%MOD + findPalind(str, i, j - 1)%MOD  + 1)%MOD;
+    	else 
+    		return dp[i][j] = (MOD + findPalind(str, i + 1, j)%MOD  + findPalind(str, i, j - 1)%MOD  - findPalind(str, i + 1, j - 1)%MOD)%MOD ;
+    
+    }
+    long long int  countPS(string str)
+    {
+       //Your code here
+       int n = str.length();
+       dp[n+1][n+1];
+        memset(dp,-1,sizeof(dp));
+        return findPalind(str,0,n-1) % MOD;
+    }
